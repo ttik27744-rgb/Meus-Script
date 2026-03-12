@@ -1,1 +1,46 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+local Window = Rayfield:CreateWindow({
+   Name = "speed tank",
+   LoadingTitle = "Criado por: eoo_silva7",
+   ConfigurationSaving = { Enabled = false }
+})
+
+local Tab = Window:CreateTab("Velocidade", 4483362458)
+
+local sValue = 0
+local sEnabled = false
+
+Tab:CreateToggle({
+   Name = "Ativar Velocidade",
+   CurrentValue = false,
+   Callback = function(v) sEnabled = v end,
+})
+
+Tab:CreateSlider({
+   Name = "Ajustar Força",
+   Range = {0, 10},
+   Increment = 0.5,
+   CurrentValue = 0,
+   Callback = function(v) sValue = v end,
+})
+
+-- Loop de Movimento (Método que funcionou no seu jogo)
+game:GetService("RunService").Heartbeat:Connect(function()
+    if sEnabled and sValue > 0 then
+        local char = game.Players.LocalPlayer.Character
+        local hrp = char and char:FindFirstChild("HumanoidRootPart")
+        local hum = char and char:FindFirstChild("Humanoid")
+        
+        if hrp and hum and hum.MoveDirection.Magnitude > 0 then
+            -- Move o CFrame suavemente para evitar o rubberband (puxão) do servidor
+            hrp.CFrame = hrp.CFrame + (hum.MoveDirection * (sValue / 8))
+        end
+    end
+end)
+
+Rayfield:Notify({
+    Title = "Script Carregado",
+    Content = "Menu speed tank por eoo_silva7 pronto!",
+    Duration = 5
+})
